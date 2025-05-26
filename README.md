@@ -1,1 +1,3 @@
-inventory management using loops for update and display of stock for a car showroom business 
+assignment 1:inventory management using loops for update and display of stock for a car showroom business 
+assignment 2:factorial of 5
+assignment 3: erro handling
