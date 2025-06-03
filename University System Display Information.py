@@ -34,9 +34,9 @@ class Staff(Person):
 
 # Example usage:
 people = [
-    Student("Alice", 20, "S123"),
-    Lecturer("Dr. Smith", 45, "Mathematics"),
-    Staff("Bob", 35, "Administrator")
+    Student("Francis", 20, "S123"),
+    Lecturer("Dr. Jemimah", 45, "Mathematics"),
+    Staff("Max", 35, "Administrator")
 ]
 
 for person in people:
