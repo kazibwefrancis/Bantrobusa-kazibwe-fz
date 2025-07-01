@@ -1,7 +1,3 @@
-"""
-Check X App Permissions and Provide Guidance
-"""
-
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -9,12 +5,10 @@ import tweepy
 from config import API_CONFIG
 
 def check_permissions():
-    """Check current app permissions and provide guidance"""
     print("🔍 Checking X App Permissions...")
     print("=" * 50)
     
     try:
-        # Create client
         client = tweepy.Client(
             bearer_token=API_CONFIG['bearer_token'],
             consumer_key=API_CONFIG['api_key'],
@@ -24,16 +18,13 @@ def check_permissions():
             wait_on_rate_limit=True
         )
         
-        # Get user info
         user = client.get_me()
         print(f"✅ Authenticated as: @{user.data.username}")
         print(f"📝 User ID: {user.data.id}")
         
-        # Try to post a test tweet (this will fail if permissions are wrong)
         print("\n🧪 Testing posting permissions...")
         
         try:
-            # This is a dry run - we won't actually post
             print("⚠️  Cannot test actual posting without making a real post")
             print("   Your app likely has READ-ONLY permissions")
             

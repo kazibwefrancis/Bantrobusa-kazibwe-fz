@@ -1,14 +1,9 @@
-"""
-Content Management and Posting Functions
-"""
-
 import logging
 import time
 from typing import List, Optional, Dict, Any
 from datetime import datetime, timedelta
 from dotenv import load_dotenv
 
-# Load environment variables before importing other modules
 load_dotenv()
 
 import tweepy
@@ -19,7 +14,6 @@ logger = logging.getLogger(__name__)
 
 
 class ContentManager:
-    """Manages content creation and posting to X"""
     
     def __init__(self):
         self.auth_handler = XAuthHandler()
@@ -29,28 +23,15 @@ class ContentManager:
         self.rate_limit_reset_time = datetime.now()
     
     def post_tweet(self, content: str, media_ids: Optional[List[str]] = None) -> bool:
-        """
-        Post a tweet to X
-        
-        Args:
-            content: The tweet content
-            media_ids: Optional list of media IDs to attach
-            
-        Returns:
-            bool: True if successful, False otherwise
-        """
         try:
-            # Check rate limits
             if not self._check_rate_limits():
                 logger.warning("Rate limit exceeded, skipping post")
                 return False
             
-            # Validate content length
             if len(content) > POSTING_CONFIG['max_tweet_length']:
                 logger.error(f"Tweet too long: {len(content)} characters")
                 return False
             
-            # Post the tweet
             response = self.client.create_tweet(
                 text=content,
                 media_ids=media_ids
@@ -72,7 +53,6 @@ class ContentManager:
             error_msg = str(e)
             logger.error(f"Forbidden: {error_msg}")
             
-            # Provide specific guidance for permission issues
             if "oauth1 app permissions" in error_msg.lower():
                 logger.error("❌ APP PERMISSION ISSUE:")
                 logger.error("   Your X app needs 'Read and Write' permissions")
@@ -91,16 +71,6 @@ class ContentManager:
             return False
     
     def post_with_retry(self, content: str, media_ids: Optional[List[str]] = None) -> bool:
-        """
-        Post a tweet with retry logic
-        
-        Args:
-            content: The tweet content
-            media_ids: Optional list of media IDs to attach
-            
-        Returns:
-            bool: True if successful, False otherwise
-        """
         for attempt in range(POSTING_CONFIG['retry_attempts']):
             if self.post_tweet(content, media_ids):
                 return True
@@ -114,12 +84,10 @@ class ContentManager:
         return False
     
     def get_default_content(self) -> str:
-        """Get a piece of default content to post"""
         import random
         content_list = CONTENT_CONFIG['default_content']
         base_content = random.choice(content_list)
         
-        # Add hashtags if configured
         hashtags = CONTENT_CONFIG.get('hashtags', [])
         if hashtags:
             hashtag_str = ' ' + ' '.join(hashtags)
@@ -129,44 +97,29 @@ class ContentManager:
         return base_content
     
     def _check_rate_limits(self) -> bool:
-        """Check if we're within rate limits"""
         now = datetime.now()
         
-        # Reset counter if window has passed
         if now >= self.rate_limit_reset_time:
             self.post_count = 0
             self.rate_limit_reset_time = now + timedelta(seconds=POSTING_CONFIG['rate_limit_window'])
         
-        # Check if we've exceeded the limit
         if self.post_count >= POSTING_CONFIG['max_tweets_per_window']:
             return False
         
         return True
     
     def _update_rate_limit_tracking(self) -> None:
-        """Update rate limit tracking after successful post"""
         self.post_count += 1
         self.last_post_time = datetime.now()
     
     def _handle_rate_limit(self) -> None:
-        """Handle rate limit by waiting for reset"""
         wait_time = (self.rate_limit_reset_time - datetime.now()).total_seconds()
         if wait_time > 0:
             logger.info(f"Waiting {wait_time:.0f} seconds for rate limit reset")
             time.sleep(wait_time)
     
     def upload_media(self, file_path: str) -> Optional[str]:
-        """
-        Upload media file and return media ID
-        
-        Args:
-            file_path: Path to the media file
-            
-        Returns:
-            str: Media ID if successful, None otherwise
-        """
         try:
-            # Use API v1.1 for media upload
             api = self.auth_handler.get_api()
             media = api.media_upload(file_path)
             logger.info(f"Media uploaded successfully: ID {media.media_id}")
@@ -176,7 +129,6 @@ class ContentManager:
             return None
     
     def get_rate_limit_status(self) -> Dict[str, Any]:
-        """Get current rate limit status"""
         return {
             'posts_in_window': self.post_count,
             'max_posts_per_window': POSTING_CONFIG['max_tweets_per_window'],

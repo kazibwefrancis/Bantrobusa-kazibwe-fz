@@ -1,7 +1,3 @@
-"""
-Test posting with new tokens
-"""
-
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -9,12 +5,10 @@ import tweepy
 from config import API_CONFIG
 
 def test_new_tokens():
-    """Test posting with the new access tokens"""
     print("🧪 Testing new access tokens...")
     print("=" * 40)
     
     try:
-        # Create client with new tokens
         client = tweepy.Client(
             bearer_token=API_CONFIG['bearer_token'],
             consumer_key=API_CONFIG['api_key'],
@@ -24,11 +18,9 @@ def test_new_tokens():
             wait_on_rate_limit=True
         )
         
-        # Test authentication
         user = client.get_me()
         print(f"✅ Authenticated as: @{user.data.username}")
         
-        # Test posting
         print("\n🚀 Testing tweet posting...")
         test_content = "🎉 Testing my X posting agent with new permissions! #automation #success"
         

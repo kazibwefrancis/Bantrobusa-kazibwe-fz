@@ -1,7 +1,3 @@
-"""
-Quick test script to verify X API authentication
-"""
-
 from dotenv import load_dotenv
 load_dotenv()
 

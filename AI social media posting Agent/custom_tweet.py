@@ -1,13 +1,8 @@
-"""
-Send a specific tweet - Edit the content below and run
-"""
-
 from dotenv import load_dotenv
 load_dotenv()
 
 from content_manager import ContentManager
 
-# 📝 EDIT THIS LINE - Put your tweet content here:
 TWEET_CONTENT = "Just deployed my X posting agent! 🤖 Time to automate my social media game. #Python #Automation #TechLife"
 
 def main():
