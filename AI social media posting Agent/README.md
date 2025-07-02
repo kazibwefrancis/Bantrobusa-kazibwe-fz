@@ -34,7 +34,6 @@ For the safety of my X account i will not share my secret keys so you will have 
 ├── .env                   # Environment variables (API keys)
 ├── .env.example          # Template for environment variables
 ├── .gitignore            # Git ignore patterns
-├── copilot-instructions.md # Development guidelines
 └── README.md             # This file
 ```
 
